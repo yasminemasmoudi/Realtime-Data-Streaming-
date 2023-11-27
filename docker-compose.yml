@@ -23,8 +23,7 @@ services:
     hostname: broker
     container_name: broker
     depends_on:
-      zookeeper:
-        condition: service_healthy
+      - zookeeper
     ports:
       - "9092:9092"
       - "9101:9101"
@@ -60,8 +59,7 @@ services:
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
-      broker:
-        condition: service_healthy
+      - broker
     ports:
       - "8081:8081"
     environment:
@@ -81,10 +79,9 @@ services:
     hostname: control-center
     container_name: control-center
     depends_on:
-      broker:
-        condition: service_healthy
-      schema-registry:
-        condition: service_healthy
+      - broker
+      - schema-registry
+    
     ports:
       - "9021:9021"
     environment:
@@ -136,8 +133,7 @@ services:
   scheduler:
     image: apache/airflow:2.6.0-python3.9
     depends_on:
-      webserver:
-        condition: service_healthy
+      - webserver
     volumes:
       - ./dags:/opt/airflow/dags
       - ./script/entrypoint.sh:/opt/airflow/script/entrypoint.sh
